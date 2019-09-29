@@ -19,5 +19,27 @@ windows记事本文本搜索器
 多开一个线程显示进度。利用’\r’让命令行一直在同一行输出，过程中发现由于’\r’执行太频繁导致输出闪烁看不清，因此加入Thread.sleep延长刷新时间。
 ### 支持多种语言以及多种编码。
 检测编码利用bom头
+```Java
+LineNumberReader lnr = new LineNumberReader(new InputStreamReader(new FileInputStream(file),codeString(name)));
+public static String codeString(String name) throws IOException {
+	BufferedInputStream bis = new BufferedInputStream(new FileInputStream(name));
+	int a = (bis.read()<<8) + bis.read();
+	String code = null;
+	switch(a) {
+		case 0xefbb:
+			code = "utf-8";
+			break;
+		case 0xfffe:
+			code = "unicode";
+			break;
+		case 0xfeff:
+			code = "utf-16be";
+			break;
+		default:
+			code = "gbk";
+	}
+	return code;
+}
+```
 ### 统计时间
 利用函数读取查找开始时间与查找结束时间，作差得
